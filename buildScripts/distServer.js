@@ -5,9 +5,7 @@
 import express from 'express';
 import open from 'open';
 import path from 'path';
-
-import webpack from 'webpack';
-import config from '../webpack.config.dev';
+import compression from 'compression';
 
 /* eslint-disable no-console*/
 //var port = 3000;
@@ -15,17 +13,15 @@ import config from '../webpack.config.dev';
 
 const port = 3000;
 const app = express();
-const complier = webpack(config);
 
-app.use(require('webpack-dev-middleware')(complier,{
-  noInfo: true,
-  publicPath: config.output.publicPath
-}));
+app.use(compression());
+app.use(express.static('dist'));
 
 app.get('/', function(req, res){
-  res.sendFile(path.join(__dirname, '../src/index.html'));
+  res.sendFile(path.join(__dirname, '../dist/index.html'));
 });
 
+/*
 app.get('/users', function(req, res){
   //hard coding data
   res.json([
@@ -34,7 +30,7 @@ app.get('/users', function(req, res){
     {"id": 3, "firstName":"Tina","lastName": "Lee","email": "lee.tina@hotmail.com"}
   ]);
 });
-
+*/
 app.listen(port, function(err){
   if(err)
   {
